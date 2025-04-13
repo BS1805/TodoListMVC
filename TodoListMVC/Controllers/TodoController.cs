@@ -41,6 +41,8 @@ namespace TodoListMVC.Controllers
             }
         }
 
+
+
         // GET: Todo/Details/5
         public async Task<IActionResult> Details(int id)
         {
@@ -119,7 +121,6 @@ namespace TodoListMVC.Controllers
                 return View("Error");
             }
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UpdateTodoItemDto updateTodoItemDto)
@@ -143,18 +144,21 @@ namespace TodoListMVC.Controllers
                         return NotFound();
                     }
 
-                    // Redirect to the Index action with the updated list of tasks
-                    return RedirectToAction(nameof(Index));
+                    // Successfully updated, redirect to the Index view
+                    return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
+                    // Log the error and add a model error to display in the view
                     _logger.LogError(ex, $"Error updating todo item with ID {id}");
                     ModelState.AddModelError("", "An error occurred while updating the task.");
                 }
             }
 
+            // If the model is invalid, return the same view with the current data
             return View(updateTodoItemDto);
         }
+
 
 
         // GET: Todo/Delete/5
