@@ -181,6 +181,44 @@ namespace TodoListMVC.Controllers
             }
         }
 
+        // POST: Todo/GenerateRandomData
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GenerateRandomData()
+        {
+            try
+            {
+                // Generate 50 random todo items
+                var random = new Random();
+                var priorities = new[] { 1, 2, 3 }; // Low, Medium, High
+
+                for (int i = 0; i < 50; i++)
+                {
+                    var createDto = new CreateTodoItemDto
+                    {
+                        Title = $"Random Task #{i + 1}",
+                        Description = $"This is a randomly generated task #{i + 1} created on {DateTime.Now:g}",
+
+                        Priority = priorities[random.Next(3)], // Random priority
+                        DueDate = DateTime.Now.AddDays(random.Next(1, 31)) // Random due date within next month
+                    };
+
+                    await _todoService.CreateTodoItemAsync(createDto);
+                }
+
+                TempData["Message"] = "Successfully generated 50 random tasks!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating random todo items");
+                TempData["Error"] = "An error occurred while generating random tasks.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+
+
         // POST: Todo/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -195,7 +233,7 @@ namespace TodoListMVC.Controllers
                 }
                 else
                 {
-                    TempData["Error"] = "Unable to delete item.";
+                    TempData["Error"] = "Unable to delete item."; // Make sure this line is present
                 }
                 return RedirectToAction(nameof(Index));
             }

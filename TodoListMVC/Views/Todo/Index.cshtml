@@ -9,7 +9,16 @@
         <div class="col-12 col-md-8">
             <h1 class="display-4 text-primary text-center">My Todo List</h1>
             <p class="text-center">
-                <a asp-action="Create" class="btn btn-lg btn-success rounded-pill shadow-lg">Add New Task</a>
+                <a asp-action="Create" class="btn btn-lg btn-success rounded-pill shadow-lg me-2">Add New Task</a>
+
+                <!-- Random data generation button -->
+                <form asp-action="GenerateRandomData" method="post" class="d-inline text-center w-100">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-warning rounded-pill shadow-lg mx-auto d-block">
+                        Generate 50k Random Tasks
+                    </button>
+                </form>
+
             </p>
         </div>
     </div>
